@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_warehouse_minimap" model="ir.actions.client">
+        <field name="name">Warehouse Map</field>
+        <field name="tag">warehouse_minimap</field>
+    </record>
+
+    <menuitem
+        id="menu_warehouse_minimap"
+        name="Warehouse Map"
+        parent="stock.menu_stock_root"
+        action="action_warehouse_minimap"
+        sequence="50"
+        groups="stock.group_stock_user,stock.group_stock_manager"
+    />
+
+</odoo>

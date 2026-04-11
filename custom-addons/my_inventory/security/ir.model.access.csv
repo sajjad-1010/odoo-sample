@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_picking_custom_user,stock.picking.custom.user,stock.model_stock_picking,stock.group_stock_user,1,1,1,0
+access_stock_picking_custom_manager,stock.picking.custom.manager,stock.model_stock_picking,stock.group_stock_manager,1,1,1,1
+access_stock_move_custom_user,stock.move.custom.user,stock.model_stock_move,stock.group_stock_user,1,1,1,0
+access_stock_move_custom_manager,stock.move.custom.manager,stock.model_stock_move,stock.group_stock_manager,1,1,1,1
+access_warehouse_zone_config_user,warehouse.zone.config.user,my_inventory.model_warehouse_zone_config,stock.group_stock_user,1,0,0,0
+access_warehouse_zone_config_manager,warehouse.zone.config.manager,my_inventory.model_warehouse_zone_config,stock.group_stock_manager,1,1,1,1

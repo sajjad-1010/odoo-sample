@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+<t t-name="my_inventory.WarehouseMinimap">
+<div class="o_action o_warehouse_minimap">
+<style>
+/* ── Base ───────────────────────────────────────────────── */
+.o_warehouse_minimap{background:#f5f0f4;min-height:100vh;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+
+/* ── Toolbar ────────────────────────────────────────────── */
+.o_mm_toolbar{background:#fff;border-bottom:2px solid #875A7B;padding:14px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 2px 6px rgba(135,90,123,.08);}
+.o_mm_toolbar h4{margin:0;font-size:17px;font-weight:700;color:#875A7B;letter-spacing:.3px;}
+.o_mm_search{border:1.5px solid #c9b0c2;border-radius:8px;padding:7px 14px;font-size:13px;width:220px;outline:none;transition:border .2s,box-shadow .2s;background:#fdf8fc;}
+.o_mm_search:focus{border-color:#875A7B;box-shadow:0 0 0 3px rgba(135,90,123,.12);}
+
+/* ── Stats row ──────────────────────────────────────────── */
+.o_mm_stats{background:#fff;border-bottom:1px solid #ede0ea;padding:8px 24px;display:flex;gap:24px;}
+.o_mm_stat{font-size:12px;color:#666;display:flex;align-items:center;gap:6px;}
+.o_mm_stat strong{color:#875A7B;font-size:15px;}
+
+/* ── Floor ──────────────────────────────────────────────── */
+.o_mm_floor{flex:1;padding:28px;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;}
+
+/* ── Zone card (fallback mode) ──────────────────────────── */
+.o_mm_zone{background:#fff;border-radius:12px;border:1.5px solid #875A7B;box-shadow:0 2px 10px rgba(135,90,123,.10);overflow:hidden;min-width:148px;}
+.o_mm_zone_header{padding:9px 14px;background:#875A7B;color:#fff;font-weight:700;font-size:12px;letter-spacing:.6px;text-transform:uppercase;}
+.o_mm_zone_body{padding:12px 12px 10px;display:flex;flex-direction:column;gap:7px;}
+.o_mm_zone_divider{height:1px;background:#f0e6ee;margin:2px 0;}
+
+/* ── Zone section (config mode) ─────────────────────────── */
+.o_mm_zone_section{background:#fff;border-radius:12px;border:1.5px solid #875A7B;box-shadow:0 2px 10px rgba(135,90,123,.10);overflow:hidden;align-self:flex-start;}
+.o_mm_zone_section_header{padding:10px 18px;background:#875A7B;color:#fff;font-weight:700;font-size:13px;letter-spacing:.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
+.o_mm_zone_section_meta{font-weight:400;font-size:11px;opacity:.8;letter-spacing:0;}
+.o_mm_zone_section_body{padding:14px 18px;display:flex;flex-direction:column;gap:10px;}
+.o_mm_row_line{display:flex;align-items:center;gap:10px;}
+.o_mm_row_label{font-size:11px;font-weight:700;color:#875A7B;min-width:52px;white-space:nowrap;flex-shrink:0;}
+.o_mm_row_cells{display:flex;gap:6px;flex-wrap:wrap;}
+.o_mm_no_locations{color:#ccc;font-size:12px;font-style:italic;padding:6px 0;}
+
+/* ── Cells ──────────────────────────────────────────────── */
+.o_mm_cell{border-radius:9px;padding:9px 12px;min-width:80px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:transform 0.15s ease,box-shadow 0.15s ease;box-shadow:0 1px 3px rgba(0,0,0,.08);user-select:none;}
+.o_mm_cell:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(0,0,0,.14);}
+.o_mm_empty      {background:#ebebeb;color:#888;}
+.o_mm_low        {background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9;}
+.o_mm_mid        {background:#a5d6a7;color:#1b5e20;border:1px solid #81c784;}
+.o_mm_high       {background:#388e3c;color:#fff;border:1px solid #2e7d32;}
+.o_mm_search_match{background:#fff3e0;color:#7d3c0a;border:2px solid #fd7e14;}
+
+/* ── Cell label + badge ─────────────────────────────────── */
+.o_mm_cell_name{font-size:12px;font-weight:600;}
+.o_mm_badge{font-size:11px;font-weight:700;border-radius:20px;padding:2px 8px;white-space:nowrap;background:rgba(0,0,0,.10);color:inherit;}
+.o_mm_badge_low  {background:#2e7d32;color:#fff;}
+.o_mm_badge_mid  {background:#1b5e20;color:#fff;}
+.o_mm_badge_high {background:#fff;color:#1b5e20;}
+.o_mm_badge_match{background:#e85d04;color:#fff;}
+
+/* ── Tooltip ────────────────────────────────────────────── */
+.o_mm_tooltip{position:fixed;z-index:9999;background:#fff;border-radius:12px;border:1.5px solid #875A7B;box-shadow:0 8px 28px rgba(135,90,123,.22);min-width:230px;max-width:300px;overflow:hidden;pointer-events:none;animation:mmFadeIn .15s ease;}
+@keyframes mmFadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.o_mm_tt_header{padding:10px 14px 8px;background:linear-gradient(135deg,#875A7B,#6b4463);color:#fff;}
+.o_mm_tt_path{font-size:10px;opacity:.8;margin-bottom:2px;}
+.o_mm_tt_title{font-weight:700;font-size:13px;}
+.o_mm_tt_total{font-size:11px;margin-top:3px;opacity:.9;}
+.o_mm_tt_body{padding:4px 0 6px;}
+.o_mm_tt_row{padding:5px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;transition:background .1s;}
+.o_mm_tt_row.is-match{background:#fffbeb;}
+.o_mm_tt_qty{font-weight:700;background:#1a1a2e;color:#fff;border-radius:20px;padding:1px 9px;font-size:11px;min-width:28px;text-align:center;}
+.o_mm_tt_empty{padding:10px 14px;color:#999;font-size:12px;font-style:italic;text-align:center;}
+.o_mm_highlight_span{background:#ffd60a;border-radius:3px;padding:0 2px;font-weight:700;color:#000;}
+
+/* ── Capacity bar ───────────────────────────────────────── */
+.o_mm_tt_cap{padding:8px 14px 10px;border-top:1px solid #f0e6ee;}
+.o_mm_tt_cap_label{font-size:10px;color:#999;margin-bottom:4px;display:flex;justify-content:space-between;}
+.o_mm_tt_cap_track{background:#f0e6ee;border-radius:4px;height:6px;overflow:hidden;}
+.o_mm_tt_cap_fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#875A7B,#6b4463);transition:width .3s ease;}
+
+/* ── Legend ─────────────────────────────────────────────── */
+.o_mm_legend{position:fixed;bottom:22px;right:22px;background:#fff;border-radius:12px;border:1px solid #e0d0dd;box-shadow:0 4px 18px rgba(135,90,123,.14);padding:12px 16px;font-size:12px;display:flex;flex-direction:column;gap:6px;z-index:100;}
+.o_mm_legend_item{display:flex;align-items:center;gap:8px;color:#444;}
+.o_mm_legend_dot{width:14px;height:14px;border-radius:4px;flex-shrink:0;}
+.o_mm_legend_count{margin-left:auto;font-weight:700;color:#875A7B;padding-left:12px;}
+
+/* ── Legacy section divider ─────────────────────────────── */
+.o_mm_legacy_divider{width:100%;display:flex;align-items:center;gap:12px;padding:4px 0 12px;color:#875A7B;font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;opacity:.7;}
+.o_mm_legacy_divider::before,.o_mm_legacy_divider::after{content:'';flex:1;height:1px;background:#d9c9d6;}
+
+/* ── Empty state ────────────────────────────────────────── */
+.o_mm_empty_state{margin:40px auto;max-width:420px;}
+</style>
+
+<!-- Toolbar -->
+<div class="o_mm_toolbar">
+    <h4>Warehouse Map</h4>
+    <input type="text" class="o_mm_search" t-att-placeholder="searchPlaceholder" t-on-input="onSearchInput"/>
+</div>
+
+<!-- Stats row -->
+<div class="o_mm_stats">
+    <div class="o_mm_stat"><strong t-esc="stats.total"/> Total Locations</div>
+    <div class="o_mm_stat"><strong t-esc="stats.stocked"/> With Stock</div>
+    <div class="o_mm_stat"><strong t-esc="stats.empty"/> Empty</div>
+</div>
+
+<!-- ══ UNIFIED FLOOR — zone configs + legacy cards together ══════════ -->
+<div class="o_mm_floor">
+
+    <!-- Zone config sections -->
+    <t t-foreach="state.zoneConfigs" t-as="zone" t-key="zone.id">
+        <div class="o_mm_zone_section">
+            <div class="o_mm_zone_section_header">
+                <span><t t-esc="zone.name"/></span>
+                <span class="o_mm_zone_section_meta" t-esc="zoneMeta(zone)"/>
+            </div>
+            <div class="o_mm_zone_section_body">
+                <t t-if="zone.rows.length">
+                    <t t-foreach="zone.rows" t-as="row" t-key="row.id">
+                        <div class="o_mm_row_line">
+                            <span t-if="row.name" class="o_mm_row_label"><t t-esc="row.name"/></span>
+                            <div class="o_mm_row_cells">
+                                <t t-foreach="row.shelves" t-as="shelf" t-key="shelf.id">
+                                    <div
+                                        t-att-class="cellClass(shelf)"
+                                        t-on-mouseover="(ev) => this.showTooltip(shelf, ev)"
+                                        t-on-mousemove="(ev) => this.moveTooltip(ev)"
+                                        t-on-mouseleave="() => this.hideTooltip()"
+                                    >
+                                        <span class="o_mm_cell_name"><t t-esc="shelf.name"/></span>
+                                        <t t-if="shelf.products.length">
+                                            <span t-att-class="badgeClass(shelf)"><t t-esc="totalQty(shelf)"/></span>
+                                        </t>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+                <t t-else="">
+                    <span class="o_mm_no_locations">No locations yet — click Generate Layout in Inventory → Configuration → Warehouse Layout</span>
+                </t>
+            </div>
+        </div>
+    </t>
+
+    <!-- Legacy zone cards (manual x_pos/y_pos, no zone config) -->
+    <t t-foreach="legacyZoneTree" t-as="entry" t-key="entry.zone.id">
+        <div class="o_mm_zone">
+            <div class="o_mm_zone_header"><t t-esc="shortName(entry.zone.name)"/></div>
+            <div class="o_mm_zone_body">
+                <t t-if="entry.rows.length">
+                    <t t-foreach="entry.rows" t-as="row" t-key="row.id">
+                        <div t-att-class="cellClass(row)"
+                            t-on-mouseover="(ev) => this.showTooltip(row, ev)"
+                            t-on-mousemove="(ev) => this.moveTooltip(ev)"
+                            t-on-mouseleave="() => this.hideTooltip()">
+                            <span class="o_mm_cell_name"><t t-esc="shortName(row.name)"/></span>
+                            <t t-if="row.products.length">
+                                <span t-att-class="badgeClass(row)"><t t-esc="totalQty(row)"/></span>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+                <t t-else="">
+                    <div t-att-class="cellClass(entry.zone)"
+                        t-on-mouseover="(ev) => this.showTooltip(entry.zone, ev)"
+                        t-on-mousemove="(ev) => this.moveTooltip(ev)"
+                        t-on-mouseleave="() => this.hideTooltip()">
+                        <span class="o_mm_cell_name"><t t-esc="shortName(entry.zone.name)"/></span>
+                        <t t-if="entry.zone.products.length">
+                            <span t-att-class="badgeClass(entry.zone)"><t t-esc="totalQty(entry.zone)"/></span>
+                        </t>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+
+    <!-- Empty state when nothing at all -->
+    <t t-if="!state.zoneConfigs.length and !legacyZoneTree.length">
+        <div class="alert alert-info o_mm_empty_state">
+            No locations on the map yet. Go to Inventory → Configuration → Warehouse Layout to define zones and generate locations automatically.
+        </div>
+    </t>
+
+</div>
+
+<!-- Tooltip -->
+<t t-if="state.tooltip">
+    <div
+        class="o_mm_tooltip"
+        t-attf-style="left:#{state.tooltip.screenX + 16}px;top:#{state.tooltip.screenY + 16}px;"
+    >
+        <div class="o_mm_tt_header">
+            <div class="o_mm_tt_path"><t t-esc="formatPath(state.tooltip.location.full_path || state.tooltip.location.name)"/></div>
+            <div class="o_mm_tt_title"><t t-esc="shortName(state.tooltip.location.full_path || state.tooltip.location.name)"/></div>
+            <div class="o_mm_tt_total" t-esc="tooltipTotal(state.tooltip.location)"/>
+        </div>
+
+        <div class="o_mm_tt_body">
+            <t t-if="state.tooltip.location.products.length">
+                <t t-foreach="state.tooltip.location.products" t-as="prod" t-key="prod_index">
+                    <div t-att-class="'o_mm_tt_row' + (isProductMatch(prod.product_name) ? ' is-match' : '')">
+                        <span>
+                            <t t-foreach="highlightParts(prod.product_name)" t-as="chunk" t-key="chunk_index">
+                                <t t-if="chunk.match">
+                                    <span class="o_mm_highlight_span"><t t-esc="chunk.text"/></span>
+                                </t>
+                                <t t-else=""><t t-esc="chunk.text"/></t>
+                            </t>
+                        </span>
+                        <span class="o_mm_tt_qty"><t t-esc="prod.quantity"/></span>
+                    </div>
+                </t>
+            </t>
+            <t t-else="">
+                <div class="o_mm_tt_empty">This shelf is empty</div>
+            </t>
+        </div>
+
+        <!-- Capacity bar -->
+        <div class="o_mm_tt_cap">
+            <div class="o_mm_tt_cap_label">
+                <span>Fill Level</span>
+                <span t-esc="fillPercent(state.tooltip.location) + '%'"/>
+            </div>
+            <div class="o_mm_tt_cap_track">
+                <div
+                    class="o_mm_tt_cap_fill"
+                    t-attf-style="width:#{fillPercent(state.tooltip.location)}%;"
+                />
+            </div>
+        </div>
+    </div>
+</t>
+
+<!-- Legend -->
+<div class="o_mm_legend">
+    <div class="o_mm_legend_item">
+        <span class="o_mm_legend_dot" style="background:#ebebeb;border:1px solid #ccc;"/>
+        <span>Empty</span>
+        <span class="o_mm_legend_count"><t t-esc="stats.empty"/></span>
+    </div>
+    <div class="o_mm_legend_item">
+        <span class="o_mm_legend_dot" style="background:#e8f5e9;border:1px solid #c8e6c9;"/>
+        <span>Low Stock</span>
+    </div>
+    <div class="o_mm_legend_item">
+        <span class="o_mm_legend_dot" style="background:#a5d6a7;border:1px solid #81c784;"/>
+        <span>Mid Stock</span>
+    </div>
+    <div class="o_mm_legend_item">
+        <span class="o_mm_legend_dot" style="background:#388e3c;"/>
+        <span>High Stock</span>
+        <span class="o_mm_legend_count"><t t-esc="stats.stocked"/></span>
+    </div>
+    <div class="o_mm_legend_item">
+        <span class="o_mm_legend_dot" style="background:#fff3e0;border:2px solid #fd7e14;"/>
+        <span>Search match</span>
+    </div>
+</div>
+
+</div>
+</t>
+</templates>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── List view ──────────────────────────────────────────────────── -->
+    <record id="view_warehouse_zone_config_tree" model="ir.ui.view">
+        <field name="name">warehouse.zone.config.tree</field>
+        <field name="model">warehouse.zone.config</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="num_rows" string="Rows"/>
+                <field name="num_shelves" string="Shelves/Row"/>
+                <field name="capacity" string="Capacity/Shelf"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── Form view ──────────────────────────────────────────────────── -->
+    <record id="view_warehouse_zone_config_form" model="ir.ui.view">
+        <field name="name">warehouse.zone.config.form</field>
+        <field name="model">warehouse.zone.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_generate_layout"
+                        string="Generate Layout"
+                        type="object"
+                        class="btn-primary"
+                        help="Creates WH/Stock/{Zone}/{Row}/{Shelf} locations automatically"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. Zone A"/></h1>
+                    </div>
+                    <group>
+                        <group string="Display">
+                            <field name="sequence"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Layout">
+                            <field name="num_rows"/>
+                            <field name="num_shelves"/>
+                            <field name="capacity"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Generated Locations" name="locations">
+                            <p class="text-muted" style="margin-bottom:8px;">
+                                Click <strong>Generate Layout</strong> to auto-create
+                                <code>WH/Stock/{Zone}/Row N/Shelf N</code> locations.
+                                Regenerating will delete existing empty locations first.
+                            </p>
+                            <field name="location_ids" readonly="1">
+                                <tree>
+                                    <field name="complete_name" string="Location"/>
+                                    <field name="x_pos" string="X"/>
+                                    <field name="y_pos" string="Y"/>
+                                    <field name="usage"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Action ─────────────────────────────────────────────────────── -->
+    <record id="action_warehouse_zone_config" model="ir.actions.act_window">
+        <field name="name">Warehouse Layout</field>
+        <field name="res_model">warehouse.zone.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No zones configured yet
+            </p>
+            <p>
+                Create zones to define your warehouse layout.
+                Each zone can have multiple rows and shelves per row.
+                Click <strong>Generate Layout</strong> on any zone to
+                auto-create the matching stock locations.
+            </p>
+        </field>
+    </record>
+
+    <!-- ── Menu under Inventory → Configuration ───────────────────────── -->
+    <menuitem
+        id="menu_warehouse_zone_config"
+        name="Warehouse Layout"
+        parent="stock.menu_stock_config_settings"
+        action="action_warehouse_zone_config"
+        sequence="20"
+        groups="stock.group_stock_manager"
+    />
+
+</odoo>

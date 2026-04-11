@@ -1,0 +1,126 @@
+# Persian (Farsi) translation for my_inventory
+# Copyright (C) 2024
+# This file is distributed under the same license as the my_inventory package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Persian <fa@li.org>\n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. JS: minimap_widget.js - search input placeholder
+msgid "Search product..."
+msgstr "جستجوی محصول..."
+
+#. JS: minimap_widget.js - zoneMeta
+msgid "rows"
+msgstr "ردیف"
+
+#. JS: minimap_widget.js - zoneMeta
+msgid "shelves"
+msgstr "قفسه"
+
+#. JS: minimap_widget.js - zoneMeta
+msgid "stocked"
+msgstr "پر"
+
+#. JS: minimap_widget.js - tooltipTotal (empty location)
+msgid "Empty"
+msgstr "خالی"
+
+#. JS: minimap_widget.js - tooltipTotal
+msgid "units"
+msgstr "واحد"
+
+#. JS: minimap_widget.js - tooltipTotal (singular)
+msgid "product"
+msgstr "محصول"
+
+#. JS: minimap_widget.js - tooltipTotal (plural)
+msgid "products"
+msgstr "محصول"
+
+#. XML: minimap toolbar title
+msgid "Warehouse Map"
+msgstr "نقشه انبار"
+
+#. XML: stats bar
+msgid "Total Locations"
+msgstr "مجموع مکان‌ها"
+
+#. XML: stats bar
+msgid "With Stock"
+msgstr "دارای موجودی"
+
+#. XML: empty zone body
+msgid "No locations yet — click Generate Layout in Inventory → Configuration → Warehouse Layout"
+msgstr "هنوز مکانی وجود ندارد — روی «ایجاد چیدمان» در موجودی ← تنظیمات ← چیدمان انبار کلیک کنید"
+
+#. XML: empty state when no zones at all
+msgid "No locations on the map yet. Go to Inventory → Configuration → Warehouse Layout to define zones and generate locations automatically."
+msgstr "هنوز مکانی در نقشه وجود ندارد. برای تعریف زون‌ها و ایجاد خودکار مکان‌ها به موجودی ← تنظیمات ← چیدمان انبار بروید."
+
+#. XML: tooltip empty state
+msgid "This shelf is empty"
+msgstr "این قفسه خالی است"
+
+#. XML: tooltip capacity bar label
+msgid "Fill Level"
+msgstr "سطح پری"
+
+#. XML: legend
+msgid "Low Stock"
+msgstr "موجودی کم"
+
+#. XML: legend
+msgid "Mid Stock"
+msgstr "موجودی متوسط"
+
+#. XML: legend
+msgid "High Stock"
+msgstr "موجودی زیاد"
+
+#. XML: legend
+msgid "Search match"
+msgstr "نتیجه جستجو"
+
+#. Python: warehouse_zone_config.py - UserError
+msgid "Cannot regenerate \"%s\": some locations still have stock. Transfer or clear all stock first."
+msgstr "امکان بازسازی «%s» وجود ندارد: برخی مکان‌ها هنوز موجودی دارند. ابتدا تمام موجودی را انتقال یا پاک کنید."
+
+#. Python: warehouse_zone_config.py - UserError
+msgid "No warehouse found. Please configure a warehouse first."
+msgstr "انباری یافت نشد. لطفاً ابتدا یک انبار تنظیم کنید."
+
+#. Python: model field strings
+msgid "Warehouse Zone Configuration"
+msgstr "تنظیمات زون انبار"
+
+msgid "Zone Name"
+msgstr "نام زون"
+
+msgid "Number of Rows"
+msgstr "تعداد ردیف"
+
+msgid "Shelves per Row"
+msgstr "قفسه در هر ردیف"
+
+msgid "Max Units per Shelf"
+msgstr "حداکثر واحد در هر قفسه"
+
+msgid "Generated Locations"
+msgstr "مکان‌های ایجادشده"
+
+#. Python: views - menu and action labels
+msgid "Warehouse Layout"
+msgstr "چیدمان انبار"
+
+msgid "Generate Layout"
+msgstr "ایجاد چیدمان"

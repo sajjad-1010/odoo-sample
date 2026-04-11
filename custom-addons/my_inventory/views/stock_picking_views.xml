@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Extend فرم رسید/حواله ─────────────────────────────────────── -->
+    <record id="view_picking_form_custom" model="ir.ui.view">
+        <field name="name">stock.picking.form.custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+
+            <!-- اضافه کردن تعداد کل بعد از scheduled_date -->
+            <xpath expr="//field[@name='scheduled_date']" position="after">
+                <field name="total_qty" readonly="1"/>
+            </xpath>
+
+            <!-- اضافه کردن tab توضیحات داخل notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="توضیحات" name="custom_notes">
+                    <group>
+                        <field name="note" placeholder="توضیحات اضافه..."/>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ── Extend لیست رسید/حواله ───────────────────────────────────── -->
+    <record id="view_picking_tree_custom" model="ir.ui.view">
+        <field name="name">stock.picking.tree.custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+
+            <!-- اضافه کردن ستون تعداد کل در لیست -->
+            <xpath expr="//field[@name='scheduled_date']" position="after">
+                <field name="total_qty"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
