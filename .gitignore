@@ -10,9 +10,7 @@ __pycache__/
 odoo-src/
 
 # OCA repos (managed separately)
-custom-addons/account-financial-tools/
 custom-addons/account-invoicing/
-custom-addons/account-payment/
 custom-addons/web/
 account-invoicing/
 web/

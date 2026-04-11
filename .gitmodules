@@ -1,0 +1,8 @@
+[submodule "custom-addons/account-financial-tools"]
+	path = custom-addons/account-financial-tools
+	url = https://github.com/OCA/account-financial-tools.git
+	branch = 19.0
+[submodule "custom-addons/account-payment"]
+	path = custom-addons/account-payment
+	url = https://github.com/OCA/account-payment.git
+	branch = 19.0
