@@ -1,0 +1,31 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Odoo source (too large, not custom code)
+odoo-src/
+
+# OCA repos (managed separately)
+custom-addons/account-financial-tools/
+custom-addons/account-invoicing/
+custom-addons/account-payment/
+custom-addons/web/
+
+# Logs
+logs/
+
+# Odoo filestore & sessions
+.local/
+filestore/
+
+# Secrets / local config
+*.conf
+!odoo.conf.example
+
+# OS
+.DS_Store
+Thumbs.db
