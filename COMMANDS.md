@@ -1,16 +1,15 @@
-# Odoo 17 Community - دستورات اجرا
+# Odoo 19 Community - دستورات اجرا
 
 ## ساختار پروژه
 ```
 first-odoo/
 ├── docker-compose.yml          ← PostgreSQL
 ├── odoo.conf                   ← تنظیمات Odoo
-├── odoo-src/                   ← سورس کد Odoo 17
+├── odoo-src/                   ← سورس کد Odoo 19
 ├── custom-addons/
-│   ├── account-financial-tools/  ← OCA: ابزارهای حسابداری پیشرفته
-│   ├── account-invoicing/        ← OCA: فاکتور و صورتحساب
-│   ├── web/                      ← OCA: UI components
-│   └── my_module/                ← ماژول‌های سفارشی خودت اینجا
+│   ├── account-financial-tools/  ← OCA 19.0: ابزارهای حسابداری پیشرفته
+│   ├── account-payment/          ← OCA 19.0: مدیریت پرداخت
+│   └── my_inventory/             ← ماژول سفارشی انبار با minimap
 ├── logs/                       ← فایل‌های لاگ
 └── venv/                       ← Python 3.12 محیط مجازی
 ```
@@ -90,23 +89,31 @@ custom-addons/
 
 ---
 
-## OCA Modules نصب شده
+## OCA Modules موجود (نسخه 19.0)
 
+> توجه: OCA هنوز همه ماژول‌ها رو به 19 پورت نکرده. فقط موارد زیر در 19.0 موجودن.
+
+### account-financial-tools
 | ماژول | توضیح |
 |-------|-------|
-| `account_asset_management` | مدیریت دارایی‌های ثابت |
-| `account_fiscal_year` | سال مالی |
-| `account_journal_lock_date` | قفل دوره حسابداری |
-| `account_loan` | مدیریت وام |
-| `account_move_budget` | بودجه‌بندی |
-| `account_check_deposit` | مدیریت چک |
-| `account_chart_update` | آپدیت پلان حسابداری |
+| `account_account_tag_code` | کد برای تگ‌های حسابداری |
+| `account_journal_restrict_mode` | محدود کردن ویرایش ژورنال |
+| `account_move_name_sequence` | شماره‌گذاری سفارشی اسناد |
+| `account_move_post_date_user` | نمایش تاریخ و کاربر ثبت سند |
+| `account_move_print` | چاپ اسناد حسابداری |
+| `account_usability` | بهبودهای کاربری حسابداری |
+
+### account-payment
+| ماژول | توضیح |
+|-------|-------|
+| `account_check_printing_report_base` | پایه گزارش چاپ چک |
+| `account_due_list` | لیست سررسید پرداخت‌ها |
+| `account_payment_method_base` | پایه روش‌های پرداخت |
 
 برای نصب هر ماژول در Odoo:
 ```
-Apps → جستجو → نصب
+Apps → Update Apps List → جستجو → نصب
 ```
-(اگه ماژول نشون نداد: Apps → Update Apps List)
 
 ---
 
