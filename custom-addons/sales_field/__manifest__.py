@@ -1,0 +1,30 @@
+{
+    'name': 'Sales Field',
+    'version': '19.0.1.0.0',
+    'summary': 'Simplified field sales interface for mobile salespeople',
+    'category': 'Sales',
+    'author': 'Custom',
+    'license': 'LGPL-3',
+    'depends': ['sale', 'contacts', 'account'],
+    'data': [
+        'security/sales_field_groups.xml',
+        'security/ir.model.access.csv',
+        'views/field_visit_views.xml',
+        'views/dashboard_views.xml',
+        'views/map_views.xml',
+        'views/menu.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'sales_field/static/src/js/dashboard.js',
+            'sales_field/static/src/js/gps_widget.js',
+            'sales_field/static/src/js/map_widget.js',
+            'sales_field/static/src/xml/dashboard.xml',
+            'sales_field/static/src/xml/gps_widget.xml',
+            'sales_field/static/src/xml/map_widget.xml',
+        ],
+    },
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

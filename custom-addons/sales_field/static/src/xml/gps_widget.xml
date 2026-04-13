@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+<t t-name="sales_field.GpsCapture">
+<div class="sf_gps">
+<style>
+.sf_gps{display:flex;flex-direction:column;gap:6px;}
+.sf_gps_btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;border:none;background:#667eea;color:#fff;font-size:14px;font-weight:600;cursor:pointer;}
+.sf_gps_btn:disabled{background:#ccc;cursor:not-allowed;}
+.sf_gps_btn.captured{background:#11998e;}
+.sf_gps_msg{font-size:12px;color:#666;}
+.sf_gps_msg.error{color:#e74c3c;}
+.sf_gps_msg.success{color:#11998e;font-weight:600;}
+</style>
+    <button
+        t-att-class="state.captured ? 'sf_gps_btn captured' : 'sf_gps_btn'"
+        t-att-disabled="state.loading"
+        t-on-click="captureGPS"
+    >
+        <t t-if="state.loading">⏳ Getting location...</t>
+        <t t-elif="state.captured">✅ Location captured</t>
+        <t t-else="">📍 Capture GPS Location</t>
+    </button>
+    <t t-if="state.message">
+        <span t-att-class="'sf_gps_msg ' + state.msgType" t-esc="state.message"/>
+    </t>
+</div>
+</t>
+</templates>

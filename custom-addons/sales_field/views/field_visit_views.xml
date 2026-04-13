@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Form View -->
+    <record id="field_visit_form_view" model="ir.ui.view">
+        <field name="name">field.visit.form</field>
+        <field name="model">field.visit</field>
+        <field name="arch" type="xml">
+            <form string="Visit">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                            name="action_open_contact"
+                            icon="fa-user"
+                            invisible="partner_id == False">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Contact</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                            name="action_create_invoice"
+                            icon="fa-file-text-o"
+                            invisible="visit_type != 'invoice'">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text" invisible="invoice_id != False">Create Invoice</span>
+                                <span class="o_stat_text" invisible="invoice_id == False">Open Invoice</span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="visit_type" widget="radio" options="{'horizontal': true}"/>
+                    </group>
+                    <group>
+                        <field name="salesperson_id" readonly="1"/>
+                        <field name="timestamp"/>
+                    </group>
+                    <group string="Customer">
+                        <field name="partner_id" options="{'no_create_edit': False, 'no_quick_create': False}"/>
+                        <field name="partner_name" placeholder="Or enter new customer name"/>
+                        <field name="partner_phone"/>
+                    </group>
+                    <group string="Location">
+                        <field name="latitude"/>
+                        <field name="longitude"/>
+                        <widget name="gps_capture"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" placeholder="Notes..." nolabel="1"/>
+                    </group>
+                    <group string="Invoice" invisible="visit_type != 'invoice'">
+                        <field name="invoice_id" domain="[('move_type', '=', 'out_invoice')]"/>
+                        <button string="Create New Invoice" type="object"
+                            name="action_create_invoice"
+                            class="btn-primary"
+                            invisible="invoice_id != False"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="field_visit_list_view" model="ir.ui.view">
+        <field name="name">field.visit.list</field>
+        <field name="model">field.visit</field>
+        <field name="arch" type="xml">
+            <list string="Visits" default_order="timestamp desc">
+                <field name="timestamp"/>
+                <field name="visit_type" widget="badge"
+                    decoration-info="visit_type == 'visit'"
+                    decoration-success="visit_type == 'new_customer'"
+                    decoration-warning="visit_type == 'invoice'"/>
+                <field name="display_customer"/>
+                <field name="salesperson_id"/>
+                <field name="has_location" string="GPS"/>
+                <field name="notes"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="field_visit_search_view" model="ir.ui.view">
+        <field name="name">field.visit.search</field>
+        <field name="model">field.visit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="salesperson_id"/>
+                <field name="partner_id"/>
+                <field name="visit_type"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_my_visits" model="ir.actions.act_window">
+        <field name="name">My Visits</field>
+        <field name="res_model">field.visit</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('salesperson_id', '=', uid)]</field>
+    </record>
+
+    <record id="action_all_visits" model="ir.actions.act_window">
+        <field name="name">All Visits</field>
+        <field name="res_model">field.visit</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_field_customers" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('customer_rank', '>', 0)]</field>
+        <field name="context">{'default_customer_rank': 1}</field>
+    </record>
+
+    <record id="action_field_invoices" model="ir.actions.act_window">
+        <field name="name">Invoices</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('move_type', '=', 'out_invoice')]</field>
+        <field name="context">{'default_move_type': 'out_invoice'}</field>
+    </record>
+
+</odoo>

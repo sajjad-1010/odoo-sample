@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_sales_field_root"
+        name="Field Sales"
+        parent="sale.sale_menu_root"
+        sequence="50"
+        groups="sales_field.group_sales_field_salesperson"/>
+
+    <menuitem id="menu_sales_field_dashboard"
+        name="Dashboard"
+        parent="menu_sales_field_root"
+        action="action_sales_field_dashboard"
+        sequence="10"
+        groups="sales_field.group_sales_field_salesperson"/>
+
+    <menuitem id="menu_my_visits"
+        name="My Visits"
+        parent="menu_sales_field_root"
+        action="action_my_visits"
+        sequence="20"
+        groups="sales_field.group_sales_field_salesperson"/>
+
+    <menuitem id="menu_visits_map"
+        name="Visits Map"
+        parent="menu_sales_field_root"
+        action="action_visits_map"
+        sequence="30"
+        groups="sales_field.group_sales_field_manager"/>
+
+    <menuitem id="menu_all_visits"
+        name="All Visits"
+        parent="menu_sales_field_root"
+        action="action_all_visits"
+        sequence="40"
+        groups="sales_field.group_sales_field_manager"/>
+
+    <menuitem id="menu_field_customers"
+        name="Customers"
+        parent="menu_sales_field_root"
+        action="action_field_customers"
+        sequence="50"
+        groups="sales_field.group_sales_field_salesperson"/>
+
+    <menuitem id="menu_field_invoices"
+        name="Invoices"
+        parent="menu_sales_field_root"
+        action="action_field_invoices"
+        sequence="60"
+        groups="sales_field.group_sales_field_manager"/>
+</odoo>

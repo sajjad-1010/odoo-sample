@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+<t t-name="sales_field.MapView">
+<div class="sf_map_page">
+<style>
+.sf_map_page{display:flex;flex-direction:column;height:100vh;}
+.sf_map_bar{background:#fff;border-bottom:2px solid #667eea;padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.sf_map_bar h4{margin:0;color:#667eea;font-size:16px;font-weight:700;}
+.sf_map_sel{border:1.5px solid #ddd;border-radius:8px;padding:6px 12px;font-size:13px;outline:none;}
+.sf_map_sel:focus{border-color:#667eea;}
+.sf_map_btn{padding:7px 16px;border-radius:8px;border:none;background:#667eea;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
+.sf_map_cnt{flex:1;}
+#sf_map{width:100%;height:100%;}
+.sf_legend{position:fixed;bottom:20px;right:20px;background:#fff;border-radius:12px;padding:12px 16px;box-shadow:0 4px 16px rgba(0,0,0,0.12);font-size:12px;display:flex;flex-direction:column;gap:6px;z-index:1000;}
+.sf_legend_row{display:flex;align-items:center;gap:8px;}
+.sf_legend_dot{width:12px;height:12px;border-radius:50%;}
+</style>
+    <div class="sf_map_bar">
+        <h4>📍 Visits Map</h4>
+        <select class="sf_map_sel" t-on-change="onSalesperson">
+            <option value="">All Salespeople</option>
+            <t t-foreach="state.salespeople" t-as="sp" t-key="sp.id">
+                <option t-att-value="sp.id" t-esc="sp.name"/>
+            </t>
+        </select>
+        <input type="date" class="sf_map_sel" t-on-change="onDateFrom"/>
+        <input type="date" class="sf_map_sel" t-on-change="onDateTo"/>
+        <button class="sf_map_btn" t-on-click="loadVisits">Refresh</button>
+        <span style="color:#999;font-size:12px;"><t t-esc="state.visits.length"/> visits shown</span>
+    </div>
+    <div class="sf_map_cnt"><div id="sf_map"/></div>
+    <div class="sf_legend">
+        <div class="sf_legend_row"><div class="sf_legend_dot" style="background:#667eea;"/><span>Visit</span></div>
+        <div class="sf_legend_row"><div class="sf_legend_dot" style="background:#11998e;"/><span>New Customer</span></div>
+        <div class="sf_legend_row"><div class="sf_legend_dot" style="background:#f7971e;"/><span>Invoice</span></div>
+    </div>
+</div>
+</t>
+</templates>

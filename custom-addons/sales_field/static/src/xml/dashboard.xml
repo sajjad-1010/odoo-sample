@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+<t t-name="sales_field.Dashboard">
+<div class="sf_dashboard">
+<style>
+.sf_dashboard{min-height:100vh;background:#f0f4f8;display:flex;flex-direction:column;align-items:center;padding:32px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+.sf_dashboard h2{color:#1a1a2e;font-size:22px;font-weight:700;margin-bottom:4px;}
+.sf_subtitle{color:#888;font-size:14px;margin-bottom:40px;}
+.sf_buttons{display:flex;flex-direction:column;gap:16px;width:100%;max-width:420px;}
+.sf_btn{display:flex;align-items:center;gap:18px;padding:22px 24px;border-radius:16px;border:none;cursor:pointer;font-size:18px;font-weight:700;color:#fff;box-shadow:0 4px 15px rgba(0,0,0,0.15);transition:transform 0.15s,box-shadow 0.15s;width:100%;text-align:left;}
+.sf_btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.18);}
+.sf_btn:active{transform:scale(0.97);}
+.sf_btn_visit{background:linear-gradient(135deg,#667eea,#764ba2);}
+.sf_btn_customer{background:linear-gradient(135deg,#11998e,#38ef7d);}
+.sf_btn_invoice{background:linear-gradient(135deg,#f7971e,#ffd200);color:#333;}
+.sf_btn_icon{font-size:32px;line-height:1;}
+.sf_btn_text{display:flex;flex-direction:column;}
+.sf_btn_label{font-size:18px;font-weight:700;}
+.sf_btn_sub{font-size:12px;font-weight:400;opacity:0.85;margin-top:2px;}
+.sf_stats{display:flex;gap:12px;margin-top:40px;width:100%;max-width:420px;}
+.sf_stat_card{flex:1;background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.sf_stat_num{font-size:28px;font-weight:800;color:#667eea;}
+.sf_stat_label{font-size:11px;color:#999;margin-top:2px;}
+</style>
+    <h2>Sales Field</h2>
+    <div class="sf_subtitle">Welcome, <t t-esc="userName"/></div>
+    <div class="sf_buttons">
+        <button class="sf_btn sf_btn_visit" t-on-click="onVisit">
+            <span class="sf_btn_icon">📍</span>
+            <span class="sf_btn_text">
+                <span class="sf_btn_label">Register Visit</span>
+                <span class="sf_btn_sub">Log a customer visit with GPS</span>
+            </span>
+        </button>
+        <button class="sf_btn sf_btn_customer" t-on-click="onNewCustomer">
+            <span class="sf_btn_icon">👤</span>
+            <span class="sf_btn_text">
+                <span class="sf_btn_label">New Customer</span>
+                <span class="sf_btn_sub">Add a new prospect quickly</span>
+            </span>
+        </button>
+        <button class="sf_btn sf_btn_invoice" t-on-click="onNewInvoice">
+            <span class="sf_btn_icon">🧾</span>
+            <span class="sf_btn_text">
+                <span class="sf_btn_label">New Invoice Visit</span>
+                <span class="sf_btn_sub">Register a sale on-site</span>
+            </span>
+        </button>
+    </div>
+    <div class="sf_stats">
+        <div class="sf_stat_card">
+            <div class="sf_stat_num"><t t-esc="state.todayCount"/></div>
+            <div class="sf_stat_label">Today</div>
+        </div>
+        <div class="sf_stat_card">
+            <div class="sf_stat_num"><t t-esc="state.weekCount"/></div>
+            <div class="sf_stat_label">This Week</div>
+        </div>
+        <div class="sf_stat_card">
+            <div class="sf_stat_num"><t t-esc="state.totalCount"/></div>
+            <div class="sf_stat_label">Total</div>
+        </div>
+    </div>
+</div>
+</t>
+</templates>

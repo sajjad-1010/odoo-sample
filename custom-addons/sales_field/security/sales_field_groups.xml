@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="group_sales_field_salesperson" model="res.groups">
+            <field name="name">Sales Field / Salesperson</field>
+        </record>
+
+        <record id="group_sales_field_manager" model="res.groups">
+            <field name="name">Sales Field / Manager</field>
+            <field name="implied_ids" eval="[Command.link(ref('group_sales_field_salesperson'))]"/>
+            <field name="user_ids" eval="[Command.link(ref('base.user_admin'))]"/>
+        </record>
+    </data>
+</odoo>

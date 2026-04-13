@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_field_visit_salesperson,field.visit.salesperson,model_field_visit,sales_field.group_sales_field_salesperson,1,1,1,0
+access_field_visit_manager,field.visit.manager,model_field_visit,sales_field.group_sales_field_manager,1,1,1,1
+access_res_partner_salesperson,res.partner.salesperson,base.model_res_partner,sales_field.group_sales_field_salesperson,1,1,1,0
+access_account_move_salesperson,account.move.salesperson,account.model_account_move,sales_field.group_sales_field_salesperson,1,0,0,0

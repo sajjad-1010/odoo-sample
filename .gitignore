@@ -30,5 +30,8 @@ filestore/
 .DS_Store
 Thumbs.db
 
+# SSL certificates (contain private keys)
+certs/
+
 # Misc
 pip_errors.txt

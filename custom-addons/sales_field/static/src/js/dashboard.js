@@ -1,0 +1,49 @@
+/** @odoo-module **/
+
+import { Component, useState, onWillStart } from "@odoo/owl";
+import { registry } from "@web/core/registry";
+import { useService } from "@web/core/utils/hooks";
+import { user } from "@web/core/user";
+
+export class Dashboard extends Component {
+    static template = "sales_field.Dashboard";
+
+    setup() {
+        this.orm = useService("orm");
+        this.action = useService("action");
+        this.state = useState({ todayCount: 0, weekCount: 0, totalCount: 0 });
+        onWillStart(() => this._loadStats());
+    }
+
+    get userName() { return user.name; }
+
+    async _loadStats() {
+        const uid = user.userId;
+        const now = new Date();
+        const today = now.toISOString().slice(0, 10) + " 00:00:00";
+        const weekAgo = new Date(now - 7 * 86400000).toISOString().slice(0, 10) + " 00:00:00";
+        const [t, w, total] = await Promise.all([
+            this.orm.searchCount("field.visit", [["salesperson_id", "=", uid], ["timestamp", ">=", today]]),
+            this.orm.searchCount("field.visit", [["salesperson_id", "=", uid], ["timestamp", ">=", weekAgo]]),
+            this.orm.searchCount("field.visit", [["salesperson_id", "=", uid]]),
+        ]);
+        Object.assign(this.state, { todayCount: t, weekCount: w, totalCount: total });
+    }
+
+    _openForm(visit_type) {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            res_model: "field.visit",
+            view_mode: "form",
+            views: [[false, "form"]],
+            target: "new",
+            context: { default_visit_type: visit_type },
+        });
+    }
+
+    onVisit()       { this._openForm("visit"); }
+    onNewCustomer() { this._openForm("new_customer"); }
+    onNewInvoice()  { this._openForm("invoice"); }
+}
+
+registry.category("actions").add("sales_field.Dashboard", Dashboard);
