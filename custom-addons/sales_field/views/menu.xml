@@ -47,4 +47,32 @@
         action="action_field_invoices"
         sequence="60"
         groups="sales_field.group_sales_field_manager"/>
+
+    <menuitem id="menu_commission_dashboard"
+        name="Manager Dashboard"
+        parent="menu_sales_field_root"
+        action="action_commission_dashboard"
+        sequence="70"
+        groups="sales_field.group_sales_field_manager"/>
+
+    <menuitem id="menu_commission_config"
+        name="Commission Settings"
+        parent="menu_sales_field_root"
+        action="action_commission_config"
+        sequence="80"
+        groups="sales_field.group_sales_field_manager"/>
+
+    <menuitem id="menu_sales_target"
+        name="Sales Targets"
+        parent="menu_sales_field_root"
+        action="action_sales_target"
+        sequence="90"
+        groups="sales_field.group_sales_field_manager"/>
+
+    <menuitem id="menu_commission_payment"
+        name="Commission Payments"
+        parent="menu_sales_field_root"
+        action="action_commission_payment"
+        sequence="100"
+        groups="sales_field.group_sales_field_manager"/>
 </odoo>

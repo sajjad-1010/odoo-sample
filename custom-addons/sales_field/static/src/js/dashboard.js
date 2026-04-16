@@ -11,7 +11,10 @@ export class Dashboard extends Component {
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
-        this.state = useState({ todayCount: 0, weekCount: 0, totalCount: 0 });
+        this.state = useState({
+            todayCount: 0, weekCount: 0, totalCount: 0,
+            commission: null,
+        });
         onWillStart(() => this._loadStats());
     }
 
@@ -28,6 +31,22 @@ export class Dashboard extends Component {
             this.orm.searchCount("field.visit", [["salesperson_id", "=", uid]]),
         ]);
         Object.assign(this.state, { todayCount: t, weekCount: w, totalCount: total });
+
+        // Load commission stats
+        const users = await this.orm.read("res.users", [uid], [
+            "current_month_sales", "current_month_commission",
+            "current_month_target", "target_progress",
+            "total_commission_earned", "total_commission_paid", "commission_balance",
+        ]);
+        // Check if config exists
+        const configs = await this.orm.searchCount("sales.commission.config", [
+            ["salesperson_id", "=", uid], ["is_active", "=", true]
+        ]);
+        this.state.commission = { ...users[0], hasConfig: configs > 0 };
+    }
+
+    fmt(val) {
+        return (val || 0).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
     }
 
     _openForm(visit_type) {

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+<t t-name="sales_field.CommissionDashboard">
+<div class="sf_comm_dash">
+<style>
+.sf_comm_dash{padding:24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+.sf_comm_dash h3{color:#1a1a2e;font-size:20px;font-weight:700;margin-bottom:20px;}
+.sf_comm_table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);}
+.sf_comm_table th{background:#667eea;color:#fff;padding:12px 14px;text-align:right;font-size:13px;font-weight:600;}
+.sf_comm_table td{padding:11px 14px;border-bottom:1px solid #f0f0f0;font-size:13px;color:#333;}
+.sf_comm_table tr:last-child td{border-bottom:none;}
+.sf_comm_table tr:hover td{background:#f8f8ff;}
+.sf_prog_bar{width:100%;height:8px;background:#eee;border-radius:4px;overflow:hidden;}
+.sf_prog_fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#667eea,#11998e);transition:width 0.3s;}
+.sf_pay_btn{padding:5px 12px;background:#f7971e;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;}
+.sf_pay_btn:hover{background:#e8860a;}
+.sf_loading{text-align:center;padding:40px;color:#999;}
+.sf_balance_pos{color:#11998e;font-weight:700;}
+.sf_balance_neg{color:#e74c3c;font-weight:700;}
+</style>
+    <h3>📊 داشبورد مدیر — کمیسیون و اهداف</h3>
+
+    <div t-if="state.loading" class="sf_loading">در حال بارگذاری...</div>
+
+    <table t-if="!state.loading" class="sf_comm_table">
+        <thead>
+            <tr>
+                <th>فروشنده</th>
+                <th>هدف ($)</th>
+                <th>فروش ($)</th>
+                <th>پیشرفت</th>
+                <th>کمیسیون ($)</th>
+                <th>پرداخت شده ($)</th>
+                <th>مانده ($)</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            <t t-foreach="state.rows" t-as="row" t-key="row.id">
+                <tr>
+                    <td><strong t-esc="row.name"/></td>
+                    <td t-esc="fmt(row.current_month_target)"/>
+                    <td t-esc="fmt(row.current_month_sales)"/>
+                    <td style="min-width:120px;">
+                        <div class="sf_prog_bar">
+                            <div class="sf_prog_fill" t-att-style="'width:' + Math.min(row.target_progress, 100) + '%'"/>
+                        </div>
+                        <span style="font-size:11px;color:#666;">
+                            <t t-esc="(row.target_progress || 0).toFixed(0)"/>%
+                        </span>
+                    </td>
+                    <td t-esc="fmt(row.current_month_commission)"/>
+                    <td t-esc="fmt(row.total_commission_paid)"/>
+                    <td>
+                        <span t-att-class="row.commission_balance >= 0 ? 'sf_balance_pos' : 'sf_balance_neg'"
+                              t-esc="fmt(row.commission_balance)"/>
+                    </td>
+                    <td>
+                        <button class="sf_pay_btn" t-on-click="() => openPaymentForm(row.id, row.name)">
+                            پرداخت کمیسیون
+                        </button>
+                    </td>
+                </tr>
+            </t>
+        </tbody>
+    </table>
+</div>
+</t>
+</templates>

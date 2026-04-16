@@ -21,6 +21,16 @@
 .sf_stat_card{flex:1;background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
 .sf_stat_num{font-size:28px;font-weight:800;color:#667eea;}
 .sf_stat_label{font-size:11px;color:#999;margin-top:2px;}
+.sf_comm_card{width:100%;max-width:420px;background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08);margin-top:20px;overflow:hidden;}
+.sf_comm_no_config{padding:20px;text-align:center;color:#999;font-size:13px;}
+.sf_comm_section{padding:16px 20px;}
+.sf_comm_title{font-size:14px;font-weight:700;color:#1a1a2e;margin-bottom:10px;}
+.sf_comm_progress_bar{width:100%;height:10px;background:#eee;border-radius:5px;overflow:hidden;margin-bottom:6px;}
+.sf_comm_progress_fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#667eea,#11998e);}
+.sf_comm_progress_text{display:flex;justify-content:space-between;font-size:12px;color:#666;}
+.sf_comm_divider{height:1px;background:#f0f0f0;}
+.sf_comm_row{display:flex;justify-content:space-between;font-size:13px;color:#555;padding:4px 0;}
+.sf_comm_balance{font-weight:700;color:#11998e;border-top:1px solid #f0f0f0;margin-top:6px;padding-top:8px;}
 </style>
     <h2>Sales Field</h2>
     <div class="sf_subtitle">Welcome, <t t-esc="userName"/></div>
@@ -60,6 +70,36 @@
             <div class="sf_stat_num"><t t-esc="state.totalCount"/></div>
             <div class="sf_stat_label">Total</div>
         </div>
+    </div>
+
+    <!-- Commission Card -->
+    <div t-if="state.commission" class="sf_comm_card">
+        <t t-if="!state.commission.hasConfig">
+            <div class="sf_comm_no_config">
+                ⚙️ تنظیمات کمیسیون هنوز توسط مدیر انجام نشده
+            </div>
+        </t>
+        <t t-if="state.commission.hasConfig">
+            <div class="sf_comm_section">
+                <div class="sf_comm_title">🎯 هدف این ماه</div>
+                <div class="sf_comm_progress_bar">
+                    <div class="sf_comm_progress_fill"
+                        t-att-style="'width:' + Math.min(state.commission.target_progress || 0, 100) + '%'"/>
+                </div>
+                <div class="sf_comm_progress_text">
+                    <span><t t-esc="fmt(state.commission.current_month_sales)"/>$ از <t t-esc="fmt(state.commission.current_month_target)"/>$</span>
+                    <span><t t-esc="(state.commission.target_progress || 0).toFixed(0)"/>٪</span>
+                </div>
+            </div>
+            <div class="sf_comm_divider"/>
+            <div class="sf_comm_section">
+                <div class="sf_comm_title">💰 کمیسیون من</div>
+                <div class="sf_comm_row"><span>این ماه:</span><span><t t-esc="fmt(state.commission.current_month_commission)"/>$</span></div>
+                <div class="sf_comm_row"><span>تایید شده:</span><span><t t-esc="fmt(state.commission.total_commission_earned)"/>$</span></div>
+                <div class="sf_comm_row"><span>پرداخت شده:</span><span><t t-esc="fmt(state.commission.total_commission_paid)"/>$</span></div>
+                <div class="sf_comm_row sf_comm_balance"><span>مانده:</span><span><t t-esc="fmt(state.commission.commission_balance)"/>$</span></div>
+            </div>
+        </t>
     </div>
 </div>
 </t>
