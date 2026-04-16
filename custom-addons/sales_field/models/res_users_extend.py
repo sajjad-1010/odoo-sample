@@ -6,19 +6,19 @@ class ResUsersCommission(models.Model):
     _inherit = 'res.users'
 
     current_month_sales = fields.Float(
-        string='فروش این ماه', compute='_compute_commission_stats', digits=(16, 2))
+        string='This Month Sales', compute='_compute_commission_stats', digits=(16, 2))
     current_month_commission = fields.Float(
-        string='کمیسیون این ماه', compute='_compute_commission_stats', digits=(16, 2))
+        string='This Month Commission', compute='_compute_commission_stats', digits=(16, 2))
     current_month_target = fields.Float(
-        string='هدف این ماه', compute='_compute_commission_stats', digits=(16, 2))
+        string='This Month Target', compute='_compute_commission_stats', digits=(16, 2))
     target_progress = fields.Float(
-        string='پیشرفت هدف (%)', compute='_compute_commission_stats', digits=(5, 1))
+        string='Target Progress (%)', compute='_compute_commission_stats', digits=(5, 1))
     total_commission_earned = fields.Float(
-        string='کل کمیسیون', compute='_compute_commission_stats', digits=(16, 2))
+        string='Total Commission Earned', compute='_compute_commission_stats', digits=(16, 2))
     total_commission_paid = fields.Float(
-        string='کل پرداخت شده', compute='_compute_commission_stats', digits=(16, 2))
+        string='Total Commission Paid', compute='_compute_commission_stats', digits=(16, 2))
     commission_balance = fields.Float(
-        string='مانده کمیسیون', compute='_compute_commission_stats', digits=(16, 2))
+        string='Commission Balance', compute='_compute_commission_stats', digits=(16, 2))
 
     def _compute_commission_stats(self):
         today = date.today()
@@ -31,7 +31,6 @@ class ResUsersCommission(models.Model):
             month_end = f"{year}-{month + 1:02d}-01"
 
         for user in self:
-            # فروش این ماه از فاکتورهای تایید شده
             invoices = self.env['account.move'].search([
                 ('move_type', '=', 'out_invoice'),
                 ('state', '=', 'posted'),
@@ -41,14 +40,12 @@ class ResUsersCommission(models.Model):
             ])
             month_sales = sum(invoices.mapped('amount_untaxed'))
 
-            # کمیسیون این ماه
             config = self.env['sales.commission.config'].search([
                 ('salesperson_id', '=', user.id),
                 ('is_active', '=', True),
             ], limit=1)
             month_commission = config.compute_commission(month_sales) if config else 0.0
 
-            # کل کمیسیون (همه فاکتورهای تاریخ)
             all_invoices = self.env['account.move'].search([
                 ('move_type', '=', 'out_invoice'),
                 ('state', '=', 'posted'),
@@ -57,12 +54,10 @@ class ResUsersCommission(models.Model):
             total_sales = sum(all_invoices.mapped('amount_untaxed'))
             total_earned = config.compute_commission(total_sales) if config else 0.0
 
-            # کل پرداخت شده
             total_paid = sum(self.env['sales.commission.payment'].search([
                 ('salesperson_id', '=', user.id),
             ]).mapped('amount'))
 
-            # هدف این ماه
             target_rec = self.env['sales.target'].search([
                 ('salesperson_id', '=', user.id),
                 ('year', '=', year),

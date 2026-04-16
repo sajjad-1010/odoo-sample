@@ -18,21 +18,21 @@
 .sf_balance_pos{color:#11998e;font-weight:700;}
 .sf_balance_neg{color:#e74c3c;font-weight:700;}
 </style>
-    <h3>📊 داشبورد مدیر — کمیسیون و اهداف</h3>
+    <h3>📊 Manager Dashboard — Commission &amp; Targets</h3>
 
-    <div t-if="state.loading" class="sf_loading">در حال بارگذاری...</div>
+    <div t-if="state.loading" class="sf_loading">Loading...</div>
 
     <table t-if="!state.loading" class="sf_comm_table">
         <thead>
             <tr>
-                <th>فروشنده</th>
-                <th>هدف ($)</th>
-                <th>فروش ($)</th>
-                <th>پیشرفت</th>
-                <th>کمیسیون ($)</th>
-                <th>پرداخت شده ($)</th>
-                <th>مانده ($)</th>
-                <th>عملیات</th>
+                <th>Salesperson</th>
+                <th>Target ($)</th>
+                <th>Sales ($)</th>
+                <th>Progress</th>
+                <th>Commission ($)</th>
+                <th>Paid ($)</th>
+                <th>Balance ($)</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -57,7 +57,7 @@
                     </td>
                     <td>
                         <button class="sf_pay_btn" t-on-click="() => openPaymentForm(row.id, row.name)">
-                            پرداخت کمیسیون
+                            Pay Commission
                         </button>
                     </td>
                 </tr>

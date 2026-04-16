@@ -7,20 +7,20 @@ class SalesCommissionConfig(models.Model):
 
     salesperson_id = fields.Many2one('res.users', string='Salesperson', required=True)
     commission_type = fields.Selection([
-        ('fixed', 'درصد ثابت'),
-        ('tiered', 'پلکانی'),
-    ], string='نوع کمیسیون', required=True, default='fixed')
+        ('fixed', 'Fixed Rate'),
+        ('tiered', 'Tiered'),
+    ], string='Commission Type', required=True, default='fixed')
     calc_method = fields.Selection([
-        ('monthly', 'ماهانه'),
-        ('per_invoice', 'هر فاکتور'),
-    ], string='روش محاسبه', required=True, default='monthly')
-    fixed_rate = fields.Float(string='درصد ثابت', digits=(5, 2))
-    is_active = fields.Boolean(string='فعال', default=True)
-    note = fields.Text(string='یادداشت')
-    tier_ids = fields.One2many('sales.commission.tier', 'config_id', string='جدول پلکانی')
+        ('monthly', 'Monthly'),
+        ('per_invoice', 'Per Invoice'),
+    ], string='Calculation Method', required=True, default='monthly')
+    fixed_rate = fields.Float(string='Fixed Rate (%)', digits=(5, 2))
+    is_active = fields.Boolean(string='Active', default=True)
+    note = fields.Text(string='Notes')
+    tier_ids = fields.One2many('sales.commission.tier', 'config_id', string='Tiered Table')
 
     _sql_constraints = [
-        ('unique_salesperson', 'UNIQUE(salesperson_id)', 'هر فروشنده فقط یک تنظیم کمیسیون میتواند داشته باشد.'),
+        ('unique_salesperson', 'UNIQUE(salesperson_id)', 'Each salesperson can only have one commission config.'),
     ]
 
     def compute_commission(self, amount):
@@ -39,7 +39,7 @@ class SalesCommissionTier(models.Model):
     _description = 'Commission Tier'
     _order = 'min_amount asc'
 
-    config_id = fields.Many2one('sales.commission.config', string='تنظیم', required=True, ondelete='cascade')
-    min_amount = fields.Float(string='از مقدار', required=True)
-    max_amount = fields.Float(string='تا مقدار (0=بی‌نهایت)', default=0)
-    rate = fields.Float(string='درصد', required=True, digits=(5, 2))
+    config_id = fields.Many2one('sales.commission.config', string='Config', required=True, ondelete='cascade')
+    min_amount = fields.Float(string='From Amount', required=True)
+    max_amount = fields.Float(string='To Amount (0=Unlimited)', default=0)
+    rate = fields.Float(string='Rate (%)', required=True, digits=(5, 2))

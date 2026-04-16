@@ -6,11 +6,11 @@
         <field name="name">sales.commission.config.list</field>
         <field name="model">sales.commission.config</field>
         <field name="arch" type="xml">
-            <list string="تنظیمات کمیسیون">
+            <list string="Commission Settings">
                 <field name="salesperson_id"/>
                 <field name="commission_type"/>
                 <field name="calc_method"/>
-                <field name="fixed_rate" string="درصد" decoration-muted="commission_type != 'fixed'"/>
+                <field name="fixed_rate" string="Rate %" decoration-muted="commission_type != 'fixed'"/>
                 <field name="is_active" widget="boolean_toggle"/>
             </list>
         </field>
@@ -21,7 +21,7 @@
         <field name="name">sales.commission.config.form</field>
         <field name="model">sales.commission.config</field>
         <field name="arch" type="xml">
-            <form string="تنظیم کمیسیون">
+            <form string="Commission Config">
                 <sheet>
                     <group>
                         <group>
@@ -32,20 +32,20 @@
                         </group>
                         <group>
                             <field name="fixed_rate" invisible="commission_type != 'fixed'"
-                                string="درصد کمیسیون (%)"/>
+                                string="Commission Rate (%)"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="جدول پلکانی" invisible="commission_type != 'tiered'">
+                        <page string="Tiered Table" invisible="commission_type != 'tiered'">
                             <field name="tier_ids">
                                 <list editable="bottom">
-                                    <field name="min_amount" string="از ($)"/>
-                                    <field name="max_amount" string="تا ($) — 0=بی‌نهایت"/>
-                                    <field name="rate" string="درصد (%)"/>
+                                    <field name="min_amount" string="From ($)"/>
+                                    <field name="max_amount" string="To ($) — 0=Unlimited"/>
+                                    <field name="rate" string="Rate (%)"/>
                                 </list>
                             </field>
                         </page>
-                        <page string="یادداشت">
+                        <page string="Notes">
                             <field name="note" nolabel="1"/>
                         </page>
                     </notebook>
@@ -56,7 +56,7 @@
 
     <!-- Commission Config Action -->
     <record id="action_commission_config" model="ir.actions.act_window">
-        <field name="name">تنظیمات کمیسیون</field>
+        <field name="name">Commission Settings</field>
         <field name="res_model">sales.commission.config</field>
         <field name="view_mode">list,form</field>
     </record>
@@ -66,11 +66,11 @@
         <field name="name">sales.target.list</field>
         <field name="model">sales.target</field>
         <field name="arch" type="xml">
-            <list string="اهداف فروش">
+            <list string="Sales Targets">
                 <field name="salesperson_id"/>
                 <field name="year"/>
                 <field name="month"/>
-                <field name="target_amount" string="هدف ($)"/>
+                <field name="target_amount" string="Target ($)"/>
             </list>
         </field>
     </record>
@@ -80,13 +80,13 @@
         <field name="name">sales.target.form</field>
         <field name="model">sales.target</field>
         <field name="arch" type="xml">
-            <form string="هدف فروش">
+            <form string="Sales Target">
                 <sheet>
                     <group>
                         <field name="salesperson_id"/>
                         <field name="year"/>
                         <field name="month"/>
-                        <field name="target_amount" string="هدف فروش ($)"/>
+                        <field name="target_amount" string="Target Amount ($)"/>
                     </group>
                 </sheet>
             </form>
@@ -95,7 +95,7 @@
 
     <!-- Sales Target Action -->
     <record id="action_sales_target" model="ir.actions.act_window">
-        <field name="name">اهداف فروش</field>
+        <field name="name">Sales Targets</field>
         <field name="res_model">sales.target</field>
         <field name="view_mode">list,form</field>
     </record>
@@ -105,10 +105,10 @@
         <field name="name">sales.commission.payment.list</field>
         <field name="model">sales.commission.payment</field>
         <field name="arch" type="xml">
-            <list string="پرداخت‌های کمیسیون">
+            <list string="Commission Payments">
                 <field name="salesperson_id"/>
                 <field name="payment_date"/>
-                <field name="amount" string="مبلغ ($)"/>
+                <field name="amount" string="Amount ($)"/>
                 <field name="paid_by"/>
                 <field name="note"/>
             </list>
@@ -120,15 +120,15 @@
         <field name="name">sales.commission.payment.form</field>
         <field name="model">sales.commission.payment</field>
         <field name="arch" type="xml">
-            <form string="پرداخت کمیسیون">
+            <form string="Commission Payment">
                 <sheet>
                     <group>
                         <field name="salesperson_id"/>
                         <field name="payment_date"/>
-                        <field name="amount" string="مبلغ ($)"/>
+                        <field name="amount" string="Amount ($)"/>
                         <field name="paid_by"/>
                     </group>
-                    <group string="یادداشت">
+                    <group string="Notes">
                         <field name="note" nolabel="1"/>
                     </group>
                 </sheet>
@@ -138,14 +138,14 @@
 
     <!-- Commission Payment Action -->
     <record id="action_commission_payment" model="ir.actions.act_window">
-        <field name="name">پرداخت کمیسیون</field>
+        <field name="name">Commission Payments</field>
         <field name="res_model">sales.commission.payment</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <!-- Admin Dashboard Action -->
     <record id="action_commission_dashboard" model="ir.actions.client">
-        <field name="name">داشبورد مدیر</field>
+        <field name="name">Manager Dashboard</field>
         <field name="tag">sales_field.CommissionDashboard</field>
     </record>
 

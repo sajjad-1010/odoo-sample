@@ -76,28 +76,28 @@
     <div t-if="state.commission" class="sf_comm_card">
         <t t-if="!state.commission.hasConfig">
             <div class="sf_comm_no_config">
-                ⚙️ تنظیمات کمیسیون هنوز توسط مدیر انجام نشده
+                ⚙️ Commission settings have not been configured by the manager yet.
             </div>
         </t>
         <t t-if="state.commission.hasConfig">
             <div class="sf_comm_section">
-                <div class="sf_comm_title">🎯 هدف این ماه</div>
+                <div class="sf_comm_title">🎯 Monthly Target</div>
                 <div class="sf_comm_progress_bar">
                     <div class="sf_comm_progress_fill"
                         t-att-style="'width:' + Math.min(state.commission.target_progress || 0, 100) + '%'"/>
                 </div>
                 <div class="sf_comm_progress_text">
-                    <span><t t-esc="fmt(state.commission.current_month_sales)"/>$ از <t t-esc="fmt(state.commission.current_month_target)"/>$</span>
-                    <span><t t-esc="(state.commission.target_progress || 0).toFixed(0)"/>٪</span>
+                    <span>$<t t-esc="fmt(state.commission.current_month_sales)"/> of $<t t-esc="fmt(state.commission.current_month_target)"/></span>
+                    <span><t t-esc="(state.commission.target_progress || 0).toFixed(0)"/>%</span>
                 </div>
             </div>
             <div class="sf_comm_divider"/>
             <div class="sf_comm_section">
-                <div class="sf_comm_title">💰 کمیسیون من</div>
-                <div class="sf_comm_row"><span>این ماه:</span><span><t t-esc="fmt(state.commission.current_month_commission)"/>$</span></div>
-                <div class="sf_comm_row"><span>تایید شده:</span><span><t t-esc="fmt(state.commission.total_commission_earned)"/>$</span></div>
-                <div class="sf_comm_row"><span>پرداخت شده:</span><span><t t-esc="fmt(state.commission.total_commission_paid)"/>$</span></div>
-                <div class="sf_comm_row sf_comm_balance"><span>مانده:</span><span><t t-esc="fmt(state.commission.commission_balance)"/>$</span></div>
+                <div class="sf_comm_title">💰 My Commission</div>
+                <div class="sf_comm_row"><span>This month:</span><span>$<t t-esc="fmt(state.commission.current_month_commission)"/></span></div>
+                <div class="sf_comm_row"><span>Total earned:</span><span>$<t t-esc="fmt(state.commission.total_commission_earned)"/></span></div>
+                <div class="sf_comm_row"><span>Paid:</span><span>$<t t-esc="fmt(state.commission.total_commission_paid)"/></span></div>
+                <div class="sf_comm_row sf_comm_balance"><span>Balance:</span><span>$<t t-esc="fmt(state.commission.commission_balance)"/></span></div>
             </div>
         </t>
     </div>
