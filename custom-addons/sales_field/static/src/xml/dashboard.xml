@@ -48,20 +48,6 @@
                 <span class="sf_btn_sub">Log a customer visit with GPS</span>
             </span>
         </button>
-        <button class="sf_btn sf_btn_customer" t-on-click="onNewCustomer">
-            <span class="sf_btn_icon">👤</span>
-            <span class="sf_btn_text">
-                <span class="sf_btn_label">New Customer</span>
-                <span class="sf_btn_sub">Add a new prospect quickly</span>
-            </span>
-        </button>
-        <button class="sf_btn sf_btn_invoice" t-on-click="onNewInvoice">
-            <span class="sf_btn_icon">🧾</span>
-            <span class="sf_btn_text">
-                <span class="sf_btn_label">New Invoice Visit</span>
-                <span class="sf_btn_sub">Register a sale on-site</span>
-            </span>
-        </button>
     </div>
     <div class="sf_stats">
         <div class="sf_stat_card">

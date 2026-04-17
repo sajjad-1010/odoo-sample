@@ -35,8 +35,9 @@
                             </div>
                         </button>
                     </div>
-                    <group>
-                        <field name="visit_type" widget="radio" options="{'horizontal': true}"/>
+                    <group string="Visit Details">
+                        <field name="is_new_customer"/>
+                        <field name="is_invoice_visit" string="Has Invoice"/>
                     </group>
                     <group>
                         <field name="salesperson_id" readonly="1"/>
@@ -55,7 +56,7 @@
                     <group string="Notes">
                         <field name="notes" placeholder="Notes..." nolabel="1"/>
                     </group>
-                    <group string="Invoice" invisible="visit_type != 'invoice'">
+                    <group string="Invoice" invisible="not is_invoice_visit">
                         <field name="invoice_id" domain="[('move_type', '=', 'out_invoice')]"/>
                         <button string="Create New Invoice" type="object"
                             name="action_create_invoice"
@@ -74,10 +75,8 @@
         <field name="arch" type="xml">
             <list string="Visits" default_order="timestamp desc">
                 <field name="timestamp"/>
-                <field name="visit_type" widget="badge"
-                    decoration-info="visit_type == 'visit'"
-                    decoration-success="visit_type == 'new_customer'"
-                    decoration-warning="visit_type == 'invoice'"/>
+                <field name="is_new_customer" string="New Customer"/>
+                <field name="is_invoice_visit" string="Invoice"/>
                 <field name="display_customer"/>
                 <field name="salesperson_id"/>
                 <field name="has_location" string="GPS"/>

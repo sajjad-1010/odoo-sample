@@ -101,13 +101,18 @@ export class MapView extends Component {
         }
 
         for (const loc of Object.values(locMap)) {
-            const types = [...new Set(loc.items.map(v => v.visit_type))];
+            const types = [];
+            if (loc.items.some(v => v.is_new_customer)) types.push('new_customer');
+            if (loc.items.some(v => v.is_invoice_visit)) types.push('invoice');
             const m = window.L.marker([loc.lat, loc.lng], { icon: makeIcon(types) });
             const rows = loc.items.map(v => {
-                const color = COLORS[v.visit_type] || "#888";
+                const tags = [
+                    v.is_new_customer ? `<span style="background:#11998e;color:#fff;border-radius:4px;padding:1px 6px;font-size:11px;">New Customer</span>` : '',
+                    v.is_invoice_visit ? `<span style="background:#f7971e;color:#fff;border-radius:4px;padding:1px 6px;font-size:11px;">Invoice</span>` : '',
+                ].filter(Boolean).join(' ') || '<span style="background:#667eea;color:#fff;border-radius:4px;padding:1px 6px;font-size:11px;">Visit</span>';
                 return `<div style="padding:4px 0;border-bottom:1px solid #eee;">
                     <strong>${v.salesperson}</strong>
-                    <span style="float:right;background:${color};color:#fff;border-radius:4px;padding:1px 6px;font-size:11px;">${v.visit_type}</span><br/>
+                    <span style="float:right;">${tags}</span><br/>
                     <span style="color:#999;font-size:11px;">${v.timestamp}</span><br/>
                     👤 ${v.customer || "—"}
                     ${v.notes ? `<br/><span style="color:#555;font-size:12px;">${v.notes}</span>` : ""}
