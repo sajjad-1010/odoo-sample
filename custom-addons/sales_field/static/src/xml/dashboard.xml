@@ -3,7 +3,8 @@
 <t t-name="sales_field.Dashboard">
 <div class="sf_dashboard">
 <style>
-.sf_dashboard{min-height:100vh;background:#f0f4f8;display:flex;flex-direction:column;align-items:center;padding:32px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+.sf_dashboard{background:#f0f4f8;display:flex;flex-direction:column;align-items:center;padding:32px 16px 80px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
+.o_action_manager,.o_content,.o_client_action{overflow-y:auto !important;height:auto !important;}
 .sf_dashboard h2{color:#1a1a2e;font-size:22px;font-weight:700;margin-bottom:4px;}
 .sf_subtitle{color:#888;font-size:14px;margin-bottom:40px;}
 .sf_buttons{display:flex;flex-direction:column;gap:16px;width:100%;max-width:420px;}
@@ -21,6 +22,11 @@
 .sf_stat_card{flex:1;background:#fff;border-radius:12px;padding:16px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
 .sf_stat_num{font-size:28px;font-weight:800;color:#667eea;}
 .sf_stat_label{font-size:11px;color:#999;margin-top:2px;}
+.sf_debt_card{width:100%;max-width:420px;background:#fff8e1;border-left:4px solid #f7971e;border-radius:12px;padding:14px 18px;margin-top:16px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:transform .15s;}
+.sf_debt_card:hover{transform:translateY(-2px);}
+.sf_debt_icon{font-size:20px;}
+.sf_debt_text{flex:1;font-size:13px;color:#555;}
+.sf_debt_arrow{font-size:20px;color:#f7971e;font-weight:700;}
 .sf_comm_card{width:100%;max-width:420px;background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08);margin-top:20px;overflow:hidden;}
 .sf_comm_no_config{padding:20px;text-align:center;color:#999;font-size:13px;}
 .sf_comm_section{padding:16px 20px;}
@@ -70,6 +76,16 @@
             <div class="sf_stat_num"><t t-esc="state.totalCount"/></div>
             <div class="sf_stat_label">Total</div>
         </div>
+    </div>
+
+    <!-- Debtors Card -->
+    <div t-if="state.debtors" class="sf_debt_card" t-on-click="onDebtors">
+        <span class="sf_debt_icon">⚠️</span>
+        <span class="sf_debt_text">
+            Customers with balance: <strong><t t-esc="state.debtors.count"/></strong>
+            — Total: <strong>$<t t-esc="fmt(state.debtors.total)"/></strong>
+        </span>
+        <span class="sf_debt_arrow">›</span>
     </div>
 
     <!-- Commission Card -->

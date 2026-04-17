@@ -69,6 +69,15 @@ class FieldVisit(models.Model):
             'target': 'current',
         }
 
+    def action_view_customer_balance(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'sales_field.CustomerBalanceDialog',
+            'target': 'new',
+            'context': {'partner_id': self.partner_id.id},
+        }
+
     @api.model
     def get_visits_for_map(self, salesperson_id=None, date_from=None, date_to=None):
         domain = ['|', ('latitude', '!=', 0), ('longitude', '!=', 0)]

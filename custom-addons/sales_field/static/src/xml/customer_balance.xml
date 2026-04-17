@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+<t t-name="sales_field.CustomerBalanceDialog">
+<div class="sf_bal_wrap">
+<style>
+.sf_bal_wrap{padding:24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-width:480px;max-width:600px;}
+.sf_bal_header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+.sf_bal_name{font-size:18px;font-weight:700;color:#1a1a2e;}
+.sf_bal_meta{font-size:13px;color:#888;margin-top:4px;}
+.sf_bal_close{background:none;border:none;font-size:20px;cursor:pointer;color:#999;padding:0;}
+.sf_bal_amount{background:#fff3f3;border-left:4px solid #e74c3c;border-radius:8px;padding:14px 18px;margin-bottom:20px;}
+.sf_bal_amount.sf_zero{background:#f0fff4;border-left-color:#11998e;}
+.sf_bal_amount_label{font-size:12px;color:#999;margin-bottom:4px;}
+.sf_bal_amount_val{font-size:24px;font-weight:800;color:#e74c3c;}
+.sf_bal_amount_val.sf_zero{color:#11998e;}
+.sf_bal_section{font-size:13px;font-weight:700;color:#555;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+.sf_inv_table{width:100%;border-collapse:collapse;font-size:13px;}
+.sf_inv_table th{background:#f8f8f8;padding:8px 10px;text-align:left;font-weight:600;color:#555;border-bottom:2px solid #eee;}
+.sf_inv_table td{padding:8px 10px;border-bottom:1px solid #f0f0f0;}
+.sf_overdue{color:#e74c3c;font-weight:600;}
+.sf_no_inv{color:#999;text-align:center;padding:20px;}
+.sf_loading{text-align:center;padding:40px;color:#999;}
+.sf_error{background:#fff3f3;border-radius:8px;padding:16px;color:#e74c3c;text-align:center;}
+</style>
+    <t t-if="state.loading">
+        <div class="sf_loading">Loading...</div>
+    </t>
+    <t t-elif="state.error">
+        <div class="sf_error"><t t-esc="state.error"/></div>
+        <button class="btn btn-secondary mt-3" t-on-click="close">Close</button>
+    </t>
+    <t t-elif="state.data">
+        <div class="sf_bal_header">
+            <div>
+                <div class="sf_bal_name"><t t-esc="state.data.partner_name"/></div>
+                <div class="sf_bal_meta" t-if="state.data.partner_phone">📞 <t t-esc="state.data.partner_phone"/></div>
+                <div class="sf_bal_meta" t-if="state.data.partner_address">📍 <t t-esc="state.data.partner_address"/></div>
+            </div>
+            <button class="sf_bal_close" t-on-click="close">✕</button>
+        </div>
+
+        <div t-att-class="'sf_bal_amount' + (state.data.balance == 0 ? ' sf_zero' : '')">
+            <div class="sf_bal_amount_label">Current Balance</div>
+            <div t-att-class="'sf_bal_amount_val' + (state.data.balance == 0 ? ' sf_zero' : '')">
+                <t t-esc="state.data.currency"/> <t t-esc="fmt(state.data.balance)"/>
+            </div>
+        </div>
+
+        <div class="sf_bal_section">Unpaid Invoices (<t t-esc="state.data.unpaid_invoices.length"/>)</div>
+
+        <t t-if="state.data.unpaid_invoices.length === 0">
+            <div class="sf_no_inv">✅ No unpaid invoices</div>
+        </t>
+        <t t-else="">
+            <table class="sf_inv_table">
+                <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Due Date</th>
+                        <th>Overdue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="state.data.unpaid_invoices" t-as="inv" t-key="inv.name">
+                        <tr>
+                            <td><t t-esc="inv.name"/></td>
+                            <td><t t-esc="inv.date"/></td>
+                            <td><t t-esc="fmt(inv.amount)"/></td>
+                            <td><t t-esc="inv.due_date"/></td>
+                            <td>
+                                <span t-if="inv.days_overdue > 0" class="sf_overdue">
+                                    <t t-esc="inv.days_overdue"/> days
+                                </span>
+                                <span t-else="" style="color:#11998e;">On time</span>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </t>
+    </t>
+</div>
+</t>
+</templates>

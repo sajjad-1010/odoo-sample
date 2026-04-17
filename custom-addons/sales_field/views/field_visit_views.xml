@@ -17,6 +17,14 @@
                                 <span class="o_stat_text">Contact</span>
                             </div>
                         </button>
+                        <button class="oe_stat_button sf_balance_btn" type="object"
+                            name="action_view_customer_balance"
+                            icon="fa-money"
+                            invisible="partner_id == False">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Balance</span>
+                            </div>
+                        </button>
                         <button class="oe_stat_button" type="object"
                             name="action_create_invoice"
                             icon="fa-file-text-o"
@@ -105,12 +113,40 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <!-- Customer list with balance -->
+    <record id="sf_customer_list_view" model="ir.ui.view">
+        <field name="name">res.partner.list.sf</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="Customers" default_order="credit desc">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="city"/>
+                <field name="credit" string="Balance ($)"
+                    decoration-danger="credit > 0"
+                    decoration-success="credit == 0"/>
+                <button name="action_view_balance" type="object"
+                    string="View Balance" icon="fa-eye"
+                    class="btn-sm"/>
+            </list>
+        </field>
+    </record>
+
     <record id="action_field_customers" model="ir.actions.act_window">
         <field name="name">Customers</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">list,form</field>
+        <field name="view_id" ref="sf_customer_list_view"/>
         <field name="domain">[('customer_rank', '>', 0)]</field>
         <field name="context">{'default_customer_rank': 1}</field>
+    </record>
+
+    <record id="action_field_customers_debtors" model="ir.actions.act_window">
+        <field name="name">Customers with Balance</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="sf_customer_list_view"/>
+        <field name="domain">[('customer_rank', '>', 0), ('credit', '>', 0)]</field>
     </record>
 
     <record id="action_field_invoices" model="ir.actions.act_window">

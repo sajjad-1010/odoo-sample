@@ -14,6 +14,7 @@ export class Dashboard extends Component {
         this.state = useState({
             todayCount: 0, weekCount: 0, totalCount: 0,
             commission: null,
+            debtors: null,
         });
         onWillStart(() => this._loadStats());
     }
@@ -31,6 +32,15 @@ export class Dashboard extends Component {
             this.orm.searchCount("field.visit", [["salesperson_id", "=", uid]]),
         ]);
         Object.assign(this.state, { todayCount: t, weekCount: w, totalCount: total });
+
+        // Load debtors summary
+        const debtorsResp = await fetch("/sales_field/debtors_summary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ jsonrpc: "2.0", method: "call", id: 2, params: {} }),
+        });
+        const debtorsJson = await debtorsResp.json();
+        this.state.debtors = debtorsJson.result || { count: 0, total: 0 };
 
         // Load commission stats
         const users = await this.orm.read("res.users", [uid], [
@@ -63,6 +73,7 @@ export class Dashboard extends Component {
     onVisit()       { this._openForm("visit"); }
     onNewCustomer() { this._openForm("new_customer"); }
     onNewInvoice()  { this._openForm("invoice"); }
+    onDebtors() { this.action.doAction("sales_field.action_field_customers_debtors"); }
 }
 
 registry.category("actions").add("sales_field.Dashboard", Dashboard);
