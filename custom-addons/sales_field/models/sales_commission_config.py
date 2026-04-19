@@ -19,9 +19,10 @@ class SalesCommissionConfig(models.Model):
     note = fields.Text(string='Notes')
     tier_ids = fields.One2many('sales.commission.tier', 'config_id', string='Tiered Table')
 
-    _sql_constraints = [
-        ('unique_salesperson', 'UNIQUE(salesperson_id)', 'Each salesperson can only have one commission config.'),
-    ]
+    unique_salesperson = models.Constraint(
+        'UNIQUE(salesperson_id)',
+        'Each salesperson can only have one commission config.',
+    )
 
     def compute_commission(self, amount):
         self.ensure_one()

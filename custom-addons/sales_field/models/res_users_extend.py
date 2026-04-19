@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from datetime import date
+from collections import defaultdict
 
 
 class ResUsersCommission(models.Model):
@@ -51,8 +52,14 @@ class ResUsersCommission(models.Model):
                 ('state', '=', 'posted'),
                 ('invoice_user_id', '=', user.id),
             ])
-            total_sales = sum(all_invoices.mapped('amount_untaxed'))
-            total_earned = config.compute_commission(total_sales) if config else 0.0
+            monthly_sales = defaultdict(float)
+            for inv in all_invoices:
+                if inv.invoice_date:
+                    key = (inv.invoice_date.year, inv.invoice_date.month)
+                    monthly_sales[key] += inv.amount_untaxed
+            total_earned = sum(
+                config.compute_commission(amt) for amt in monthly_sales.values()
+            ) if config else 0.0
 
             total_paid = sum(self.env['sales.commission.payment'].search([
                 ('salesperson_id', '=', user.id),

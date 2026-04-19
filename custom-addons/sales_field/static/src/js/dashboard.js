@@ -70,9 +70,7 @@ export class Dashboard extends Component {
         });
     }
 
-    onVisit()       { this._openForm("visit"); }
-    onNewCustomer() { this._openForm("new_customer"); }
-    onNewInvoice()  { this._openForm("invoice"); }
+    onVisit()   { this._openForm("visit"); }
     onDebtors() { this.action.doAction("sales_field.action_field_customers_debtors"); }
 }
 

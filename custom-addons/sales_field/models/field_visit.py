@@ -27,7 +27,7 @@ class FieldVisit(models.Model):
     is_invoice_visit = fields.Boolean(string='Has Invoice')
 
     has_location = fields.Boolean(compute='_compute_has_location', store=True, search='_search_has_location')
-    display_customer = fields.Char(compute='_compute_display_customer', string='Customer', store=True)
+    display_customer = fields.Char(compute='_compute_display_customer', string='Customer Name', store=True)
 
     @api.depends('latitude', 'longitude')
     def _compute_has_location(self):
@@ -56,13 +56,16 @@ class FieldVisit(models.Model):
 
     def action_create_invoice(self):
         self.ensure_one()
-        invoice = self.env['account.move'].create({
-            'move_type': 'out_invoice',
-            'partner_id': self.partner_id.id if self.partner_id else False,
-            'invoice_date': self.timestamp.date() if self.timestamp else fields.Date.today(),
-            'narration': self.notes or '',
-        })
-        self.invoice_id = invoice.id
+        if self.invoice_id:
+            invoice = self.invoice_id
+        else:
+            invoice = self.env['account.move'].create({
+                'move_type': 'out_invoice',
+                'partner_id': self.partner_id.id if self.partner_id else False,
+                'invoice_date': self.timestamp.date() if self.timestamp else fields.Date.today(),
+                'narration': self.notes or '',
+            })
+            self.invoice_id = invoice.id
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'account.move',
