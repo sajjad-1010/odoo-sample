@@ -1,67 +1,51 @@
-# Odoo 19 Community - دستورات اجرا
+# Odoo 19 Community — دستورات اجرا
 
 ## ساختار پروژه
 ```
 first-odoo/
-├── docker-compose.yml          ← PostgreSQL
-├── odoo.conf                   ← تنظیمات Odoo
-├── odoo-src/                   ← سورس کد Odoo 19
+├── docker-compose.yml          ← PostgreSQL + nginx
+├── odoo.conf                   ← تنظیمات Odoo (در گیت نیست)
+├── odoo.conf.example           ← نمونه تنظیمات (در گیت هست)
+├── odoo-src/                   ← سورس کد Odoo 19 (در گیت نیست)
 ├── custom-addons/
-│   ├── account-financial-tools/  ← OCA 19.0: ابزارهای حسابداری پیشرفته
-│   ├── account-payment/          ← OCA 19.0: مدیریت پرداخت
-│   └── my_inventory/             ← ماژول سفارشی انبار با minimap
-├── logs/                       ← فایل‌های لاگ
-└── venv/                       ← Python 3.12 محیط مجازی
+│   ├── sales_field/            ← ماژول اصلی فروش میدانی
+│   ├── my_inventory/           ← ماژول انبار
+│   ├── account-financial-tools/
+│   ├── account-payment/
+│   └── account-invoicing/
+├── nginx/odoo.conf             ← تنظیمات nginx
+├── logs/                       ← فایل‌های لاگ (در گیت نیست)
+└── venv/                       ← محیط مجازی Python (در گیت نیست)
 ```
 
 ---
 
-## راه‌اندازی (اولین بار و هر بار بعد از ریستارت سیستم)
+## راه‌اندازی (هر بار بعد از ریستارت سیستم)
 
-### مرحله ۱ - دیتابیس را بالا بیاور
-
+### مرحله ۱ — دیتابیس و nginx را بالا بیاور
 ```bat
-cd D:\odoo\first-odoo
 docker compose up -d
 ```
 
-برای بررسی وضعیت:
+### مرحله ۲ — Odoo را اجرا کن
 ```bat
-docker compose ps
-```
-
-### مرحله ۲ - Odoo را اجرا کن
-
-```bat
-cd D:\odoo\first-odoo
 venv\Scripts\python.exe odoo-src\odoo-bin -c odoo.conf
 ```
 
-بعد از اجرا، مرورگر را باز کن:
-**http://localhost:8069**
+آدرس: **http://localhost:8069**
 
 ---
 
 ## دستورات متداول
 
-### متوقف کردن Odoo
-```
-Ctrl + C
+### آپدیت ماژول sales_field
+```bat
+venv\Scripts\python.exe odoo-src\odoo-bin -c odoo.conf -u sales_field -d sj-odoo
 ```
 
-### متوقف کردن دیتابیس
+### آپدیت و بعد خاموش شدن (برای CI/اسکریپت)
 ```bat
-docker compose down
-```
-
-### نصب یک ماژول خاص (اولین بار)
-```bat
-venv\Scripts\python.exe odoo-src\odoo-bin -c odoo.conf -d YOUR_DB_NAME -i module_name --stop-after-init
-```
-
-### آپدیت یک ماژول
-```bat
-venv\Scripts\python.exe odoo-src\odoo-bin -c odoo.conf -d sajjad.newnew -u my_inventory --stop-after-init
+venv\Scripts\python.exe odoo-src\odoo-bin -c odoo.conf -u sales_field -d sj-odoo --stop-after-init
 ```
 
 ### اجرا در حالت debug
@@ -69,99 +53,61 @@ venv\Scripts\python.exe odoo-src\odoo-bin -c odoo.conf -d sajjad.newnew -u my_in
 venv\Scripts\python.exe odoo-src\odoo-bin -c odoo.conf --dev=all
 ```
 
----
-
-## ماژول سفارشی
-
-ماژول‌های خودت را در پوشه `custom-addons/` بساز.
-Odoo به صورت خودکار آن‌ها را پیدا می‌کند (در `odoo.conf` تنظیم شده).
-
-ساختار یک ماژول:
+### متوقف کردن دیتابیس
+```bat
+docker compose down
 ```
-custom-addons/
-└── my_module/
-    ├── __init__.py
-    ├── __manifest__.py
-    ├── models/
-    ├── views/
-    └── security/
+
+### نصب ماژول جدید (اولین بار)
+```bat
+venv\Scripts\python.exe odoo-src\odoo-bin -c odoo.conf -d sj-odoo -i MODULE_NAME --stop-after-init
 ```
 
 ---
 
-## OCA Modules موجود (نسخه 19.0)
+## لاگ‌ها
+```bat
+# آخرین ۵۰ خط لاگ
+tail -50 logs/odoo.log
 
-> توجه: OCA هنوز همه ماژول‌ها رو به 19 پورت نکرده. فقط موارد زیر در 19.0 موجودن.
-
-### account-financial-tools
-| ماژول | توضیح |
-|-------|-------|
-| `account_account_tag_code` | کد برای تگ‌های حسابداری |
-| `account_journal_restrict_mode` | محدود کردن ویرایش ژورنال |
-| `account_move_name_sequence` | شماره‌گذاری سفارشی اسناد |
-| `account_move_post_date_user` | نمایش تاریخ و کاربر ثبت سند |
-| `account_move_print` | چاپ اسناد حسابداری |
-| `account_usability` | بهبودهای کاربری حسابداری |
-
-### account-payment
-| ماژول | توضیح |
-|-------|-------|
-| `account_check_printing_report_base` | پایه گزارش چاپ چک |
-| `account_due_list` | لیست سررسید پرداخت‌ها |
-| `account_payment_method_base` | پایه روش‌های پرداخت |
-
-برای نصب هر ماژول در Odoo:
-```
-Apps → Update Apps List → جستجو → نصب
+# لاگ زنده
+Get-Content logs\odoo.log -Wait -Tail 30
 ```
 
 ---
 
-## Staging Environment
-
-### ساخت staging از روی backup production
+## Staging (تست موازی با production)
 
 ```bat
-# ۱. backup از prod
-docker exec odoo_postgres pg_dump -U odoo YOUR_DB_NAME > backup.sql
+# backup از prod
+docker exec odoo_postgres pg_dump -U odoo sj-odoo > backup.sql
 
-# ۲. ساخت staging_db
+# ساخت و پر کردن staging
 docker exec odoo_postgres createdb -U odoo staging_db
-
-# ۳. ریختن دیتا توی staging_db
 docker exec -i odoo_postgres psql -U odoo staging_db < backup.sql
-```
 
-### اجرای staging (همزمان با production)
-
-```bat
-cd D:\odoo\first-odoo
+# اجرا staging روی پورت 8070
 venv\Scripts\python.exe odoo-src\odoo-bin -c odoo_staging.conf
-```
-
-آدرس staging: **http://localhost:8070**
-آدرس production: **http://localhost:8069**
-
-### آپدیت و تست روی staging قبل از production
-
-```bat
-# migrate روی staging
-venv\Scripts\python.exe odoo-src\odoo-bin -c odoo_staging.conf -d staging_db -u all --stop-after-init
-
-# اگه OK بود، همین کار رو روی prod انجام بده
-venv\Scripts\python.exe odoo-src\odoo-bin -c odoo.conf -d sajjad.newnew -u all --stop-after-init
 ```
 
 ---
 
 ## رفع مشکل رایج
 
-### اگر خطای pkg_resources گرفتی:
+### خطای pkg_resources
 ```bat
 venv\Scripts\pip.exe install "setuptools<74"
 ```
 
-### اگر دیتابیس وصل نشد:
+### دیتابیس وصل نشد
 ```bat
-docker compose ps   # بررسی کن که postgres در حال اجراست
+docker compose ps
+```
+
+### ماژول آپدیت نشد (0 queries)
+حتماً `-d sj-odoo` را اضافه کن — بدون آن Odoo دیتابیس را پیدا نمی‌کند.
+
+### 500 Internal Server Error
+```bat
+tail -20 logs/odoo.log
 ```

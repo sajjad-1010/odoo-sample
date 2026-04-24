@@ -11,7 +11,7 @@ class SalesTarget(models.Model):
     month = fields.Integer(string='Month', required=True)
     target_amount = fields.Float(string='Target Amount', required=True)
 
-    unique_salesperson_period = models.Constraint(
+    _unique_salesperson_period = models.Constraint(
         'UNIQUE(salesperson_id, year, month)',
         'A target for this salesperson and period already exists.',
     )
