@@ -92,7 +92,8 @@
             <search>
                 <field name="salesperson_id"/>
                 <field name="partner_id"/>
-                <field name="visit_type"/>
+                <field name="is_new_customer"/>
+                <field name="is_invoice_visit"/>
             </search>
         </field>
     </record>

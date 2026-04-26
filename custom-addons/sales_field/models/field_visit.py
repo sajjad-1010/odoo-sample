@@ -18,11 +18,6 @@ class FieldVisit(models.Model):
     timestamp = fields.Datetime(string='Time', default=fields.Datetime.now, required=True)
     notes = fields.Text(string='Notes')
     invoice_id = fields.Many2one('account.move', string='Invoice')
-    visit_type = fields.Selection([
-        ('visit', 'Visit'),
-        ('invoice', 'Invoice'),
-        ('new_customer', 'New Customer'),
-    ], string='Type', default='visit')
     is_new_customer = fields.Boolean(string='New Customer')
     is_invoice_visit = fields.Boolean(string='Has Invoice')
 
